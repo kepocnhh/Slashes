@@ -1,6 +1,7 @@
 /*
-!/app
+!/android
 !/buildSrc
+!/desktop
 !.gitignore
 !build.gradle.kts
 !settings.gradle.kts
