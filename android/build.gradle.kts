@@ -5,28 +5,20 @@ import sp.gx.core.create
 import sp.gx.core.getByName
 import sp.gx.core.kebabCase
 
-//buildscript {
-//    repositories {
-//        google()
-//    }
-//    dependencies {
-//        classpath("com.android.tools.build:gradle:8.4.1")
-//    }
-//}
-
 repositories {
     google()
     mavenCentral()
 }
 
 plugins {
-    kotlin("multiplatform")
-//    kotlin("plugin.compose") version Version.compose
+    kotlin("android")
+//    kotlin("multiplatform")
+//    id("kotlin-android")
     id("com.android.application")
     id("org.jetbrains.compose") version Version.compose
-//    id("kotlin-android")
 }
 
+/*
 kotlin {
     androidTarget()
     sourceSets {
@@ -36,10 +28,19 @@ kotlin {
                 implementation(project(":shared"))
                 implementation(compose.foundation)
                 implementation("androidx.appcompat:appcompat:1.6.1")
+//                debugImplementation("androidx.compose.ui:ui-tooling:${Version.Android.compose}")
+//                debugImplementation("androidx.compose.ui:ui-tooling-preview:${Version.Android.compose}")
+//                debugImplementation("androidx.wear:wear-tooling-preview:1.0.0")
+//                implementation("androidx.security:security-crypto:1.0.0")
+//                implementation("com.github.kepocnhh:Logics:0.1.3-SNAPSHOT")
+//                implementation("com.github.kepocnhh:Storages:0.4.2u-SNAPSHOT")
+//                implementation("com.squareup.okhttp3:okhttp:4.12.0")
+//                "watchImplementation"("androidx.wear.compose:compose-foundation:1.3.1")
             }
         }
     }
 }
+*/
 
 fun ComponentIdentity.getVersion(): String {
     val versionName = android.defaultConfig.versionName ?: error("No version name!")
@@ -111,20 +112,12 @@ android {
         res.srcDirs("src/$name/res")
     }
 
-//    composeOptions.kotlinCompilerExtensionVersion = Version.compose
-//    composeOptions.kotlinCompilerExtensionVersion = "1.5.5"
-//    composeOptions.kotlinCompilerExtensionVersion = "1.5.6"
-//    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
-//    composeOptions.kotlinCompilerExtensionVersion = "1.5.10"
-//    composeOptions.kotlinCompilerExtensionVersion = "1.5.11"
-//    composeOptions.kotlinCompilerExtensionVersion = "1.5.12"
-//    composeOptions.kotlinCompilerExtensionVersion = "1.5.13"
-//    composeOptions.kotlinCompilerExtensionVersion = "1.5.14"
-
     buildFeatures {
-//        compose = true
+        compose = true
         buildConfig = true
     }
+
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.14"
 }
 
 androidComponents.onVariants { variant ->
@@ -135,7 +128,7 @@ androidComponents.onVariants { variant ->
         tasks.getByName<JavaCompile>("compile", variant.name, "JavaWithJavac") {
             targetCompatibility = Version.jvmTarget
         }
-        tasks.getByName<KotlinCompile>("compile", variant.name, "KotlinAndroid") {
+        tasks.getByName<KotlinCompile>("compile", variant.name, "Kotlin") {
             kotlinOptions.jvmTarget = Version.jvmTarget
         }
         val checkManifestTask = tasks.create("checkManifest", variant.name) {
@@ -165,17 +158,16 @@ androidComponents.onVariants { variant ->
     }
 }
 
-/*
 dependencies {
-    debugImplementation("androidx.compose.ui:ui-tooling:${Version.Android.compose}")
-    debugImplementation("androidx.compose.ui:ui-tooling-preview:${Version.Android.compose}")
-    debugImplementation("androidx.wear:wear-tooling-preview:1.0.0")
+    implementation(project(":shared"))
+    implementation(compose.foundation)
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.compose.foundation:foundation:${Version.compose}")
-    implementation("androidx.security:security-crypto:1.0.0")
-    implementation("com.github.kepocnhh:Logics:0.1.3-SNAPSHOT")
-    implementation("com.github.kepocnhh:Storages:0.4.2u-SNAPSHOT")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    "watchImplementation"("androidx.wear.compose:compose-foundation:1.3.1")
+//    debugImplementation("androidx.compose.ui:ui-tooling:${Version.Android.compose}")
+//    debugImplementation("androidx.compose.ui:ui-tooling-preview:${Version.Android.compose}")
+//    debugImplementation("androidx.wear:wear-tooling-preview:1.0.0")
+//    implementation("androidx.security:security-crypto:1.0.0")
+//    implementation("com.github.kepocnhh:Logics:0.1.3-SNAPSHOT")
+//    implementation("com.github.kepocnhh:Storages:0.4.2u-SNAPSHOT")
+//    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+//    "watchImplementation"("androidx.wear.compose:compose-foundation:1.3.1")
 }
-*/
