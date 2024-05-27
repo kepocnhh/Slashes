@@ -12,35 +12,9 @@ repositories {
 
 plugins {
     kotlin("android")
-//    kotlin("multiplatform")
-//    id("kotlin-android")
     id("com.android.application")
     id("org.jetbrains.compose") version Version.compose
 }
-
-/*
-kotlin {
-    androidTarget()
-    sourceSets {
-        getByName("androidMain") {
-            kotlin.srcDirs("src/main/kotlin")
-            dependencies {
-                implementation(project(":shared"))
-                implementation(compose.foundation)
-                implementation("androidx.appcompat:appcompat:1.6.1")
-//                debugImplementation("androidx.compose.ui:ui-tooling:${Version.Android.compose}")
-//                debugImplementation("androidx.compose.ui:ui-tooling-preview:${Version.Android.compose}")
-//                debugImplementation("androidx.wear:wear-tooling-preview:1.0.0")
-//                implementation("androidx.security:security-crypto:1.0.0")
-//                implementation("com.github.kepocnhh:Logics:0.1.3-SNAPSHOT")
-//                implementation("com.github.kepocnhh:Storages:0.4.2u-SNAPSHOT")
-//                implementation("com.squareup.okhttp3:okhttp:4.12.0")
-//                "watchImplementation"("androidx.wear.compose:compose-foundation:1.3.1")
-            }
-        }
-    }
-}
-*/
 
 fun ComponentIdentity.getVersion(): String {
     val versionName = android.defaultConfig.versionName ?: error("No version name!")
@@ -71,7 +45,7 @@ fun ComponentIdentity.getVersion(): String {
 }
 
 android {
-    namespace = "org.kepocnhh.slashes"
+    namespace = "org.kepocnhh.slashes" // todo
     compileSdk = Version.Android.compileSdk
 
     defaultConfig {
@@ -107,10 +81,10 @@ android {
         }
     }
 
-    sourceSets.getByName("main") {
-        manifest.srcFile("src/$name/AndroidManifest.xml")
-        res.srcDirs("src/$name/res")
-    }
+//    sourceSets.getByName("main") {
+//        manifest.srcFile("src/$name/AndroidManifest.xml")
+//        res.srcDirs("src/$name/res")
+//    }
 
     buildFeatures {
         compose = true
