@@ -1,3 +1,3 @@
 rootProject.name = "Slashes"
 
-include("android", "desktop")
+include("android", "desktop", "shared")

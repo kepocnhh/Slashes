@@ -33,7 +33,7 @@ kotlin {
         getByName("androidMain") {
             kotlin.srcDirs("src/main/kotlin")
             dependencies {
-//                implementation(project(":shared"))
+                implementation(project(":shared"))
                 implementation(compose.foundation)
                 implementation("androidx.appcompat:appcompat:1.6.1")
             }

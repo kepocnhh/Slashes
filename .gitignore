@@ -2,6 +2,7 @@
 !/android
 !/buildSrc
 !/desktop
+!/shared
 !.gitignore
 !build.gradle.kts
 !gradle.properties

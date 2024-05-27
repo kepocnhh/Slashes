@@ -10,3 +10,11 @@ An application for experimenting with transferring files between devices.
 - [ ] android/watch
 
 ---
+
+## Build
+
+```
+gradle desktop:run
+```
+
+---
