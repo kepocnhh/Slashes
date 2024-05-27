@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
-import java.util.UUID
+import org.kepocnhh.slashes.module.router.RouterScreen
+import org.kepocnhh.slashes.module.tree.TreeScreen
 
 internal class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,8 +14,16 @@ internal class MainActivity : AppCompatActivity() {
         val view = ComposeView(this)
         setContentView(view)
         view.setContent {
-            val foo = remember { mutableStateOf(Foo(UUID.randomUUID())) }.value
-            Bar(foo = foo)
+            val isTreeState = remember { mutableStateOf(false) }
+            if (isTreeState.value) {
+                TreeScreen()
+            } else {
+                RouterScreen(
+                    toTree = {
+                        isTreeState.value = true
+                    },
+                )
+            }
         }
     }
 }
