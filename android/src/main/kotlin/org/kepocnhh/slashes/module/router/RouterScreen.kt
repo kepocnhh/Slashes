@@ -6,29 +6,42 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.Settings
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import org.kepocnhh.slashes.BuildConfig
 import org.kepocnhh.slashes.module.tree.TreeScreen
 
-internal object RouterScreen {
-    enum class PermissionState {
-        REQUESTED,
-        GRANTED,
-    }
+private fun Activity.requestStoragePermission() {
+    val action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+    val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
+    startActivity(Intent(action, uri))
+}
+
+private enum class PermissionState {
+    GRANTED,
+    REQUESTED,
+    REJECTED,
 }
 
 @Composable
-internal fun RouterScreen(onBack: () -> Unit) {
+internal fun RouterScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -36,34 +49,31 @@ internal fun RouterScreen(onBack: () -> Unit) {
     ) {
         val activity = LocalContext.current as? Activity
         val lifecycleOwner = LocalLifecycleOwner.current
-        val permissionState = remember { mutableStateOf<RouterScreen.PermissionState?>(null) }
+        val permissionState = remember {
+            val value = if (Environment.isExternalStorageManager()) {
+                PermissionState.GRANTED
+            } else {
+                PermissionState.REJECTED
+            }
+            mutableStateOf<PermissionState>(value)
+        }
         LaunchedEffect(Unit) {
             lifecycleOwner.lifecycle.currentStateFlow.collect {
                 when (it) {
                     Lifecycle.State.RESUMED -> {
                         when (permissionState.value) {
-                            RouterScreen.PermissionState.GRANTED -> {
+                            PermissionState.GRANTED -> {
                                 // noop
                             }
-                            RouterScreen.PermissionState.REQUESTED -> {
-                                val granted = Environment.isExternalStorageManager()
-                                if (granted) {
-                                    permissionState.value = RouterScreen.PermissionState.GRANTED
+                            PermissionState.REQUESTED -> {
+                                if (Environment.isExternalStorageManager()) {
+                                    permissionState.value = PermissionState.GRANTED
                                 } else {
-                                    onBack()
+                                    permissionState.value = PermissionState.REJECTED
                                 }
                             }
-                            null -> {
-                                val granted = Environment.isExternalStorageManager()
-                                if (granted) {
-                                    permissionState.value = RouterScreen.PermissionState.GRANTED
-                                } else {
-                                    if (activity == null) TODO()
-                                    val action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
-                                    val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
-                                    activity.startActivity(Intent(action, uri))
-                                    permissionState.value = RouterScreen.PermissionState.REQUESTED
-                                }
+                            PermissionState.REJECTED -> {
+                                // noop
                             }
                         }
                     }
@@ -74,11 +84,45 @@ internal fun RouterScreen(onBack: () -> Unit) {
             }
         }
         when (permissionState.value) {
-            RouterScreen.PermissionState.GRANTED -> {
+            PermissionState.GRANTED -> {
                 TreeScreen()
             }
-            else -> {
-                // noop
+            PermissionState.REJECTED -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
+                ) {
+                    BasicText(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(64.dp)
+                            .wrapContentSize(),
+                        text = "no permission",
+                    )
+                    BasicText(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(64.dp)
+                            .clickable(
+                                enabled = permissionState.value == PermissionState.REJECTED,
+                                onClick = {
+                                    permissionState.value = PermissionState.REQUESTED
+                                    if (activity == null) TODO()
+                                    activity.requestStoragePermission()
+                                },
+                            )
+                            .wrapContentSize(),
+                        text = "request",
+                    )
+                }
+            }
+            PermissionState.REQUESTED, null -> {
+                BasicText(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    text = "loading...",
+                )
             }
         }
     }

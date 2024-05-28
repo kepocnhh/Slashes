@@ -11,7 +11,7 @@ internal class MainActivity : AppCompatActivity() {
         val view = ComposeView(this)
         setContentView(view)
         view.setContent {
-            RouterScreen(onBack = ::finish)
+            RouterScreen()
         }
     }
 }
