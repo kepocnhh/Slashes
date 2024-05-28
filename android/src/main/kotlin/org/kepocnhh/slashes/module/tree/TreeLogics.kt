@@ -25,12 +25,24 @@ internal class TreeLogics(
         _state.value = withContext(injection.contexts.default) {
             check(current.exists())
             check(current.isDirectory)
-            val array = current.listFiles()
-            logger.debug("children: ${array?.toList()}")
+            val comparator = Comparator<File> { left, right ->
+                when {
+                    left.isDirectory -> {
+                        when {
+                            right.isDirectory -> left.name.compareTo(right.name)
+                            else -> 1
+                        }
+                    }
+                    right.isDirectory -> -1
+                    else -> left.name.compareTo(right.name)
+                }
+            }
+            val list = current.listFiles()?.sortedWith(comparator).orEmpty()
+            logger.debug("children: $list")
             State(
                 parent = current.parentFile,
                 current = current,
-                list = array?.toList().orEmpty(),
+                list = list,
             )
         }
     }
