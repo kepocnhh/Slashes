@@ -121,6 +121,7 @@ androidComponents.onVariants { variant ->
                 val applicationId by variant.applicationId
                 val expected = setOf(
                     "$applicationId.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+                    "android.permission.MANAGE_EXTERNAL_STORAGE",
                 )
                 check(actual.sorted() == expected.sorted()) {
                     "Actual is:\n$actual\nbut expected is:\n$expected"
@@ -145,4 +146,5 @@ dependencies {
 //    implementation("com.github.kepocnhh:Storages:0.4.2u-SNAPSHOT")
 //    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 //    "watchImplementation"("androidx.wear.compose:compose-foundation:1.3.1")
+    runtimeOnly("androidx.lifecycle:lifecycle-runtime:2.8.0")
 }

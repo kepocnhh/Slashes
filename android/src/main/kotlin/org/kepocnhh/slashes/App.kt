@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import kotlinx.coroutines.Dispatchers
 import org.kepocnhh.slashes.module.app.Injection
 import org.kepocnhh.slashes.provider.Contexts
+import org.kepocnhh.slashes.provider.FinalLoggers
 import sp.kx.logics.Logics
 import sp.kx.logics.LogicsFactory
 import sp.kx.logics.LogicsProvider
@@ -22,6 +23,7 @@ internal class App : Application() {
                 main = Dispatchers.Main,
                 default = Dispatchers.Default,
             ),
+            loggers = FinalLoggers(),
         )
     }
 

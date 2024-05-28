@@ -16,17 +16,21 @@ internal class TreeLogics(
         val list: List<File>,
     )
 
+    private val logger = injection.loggers.create("[Tree]")
     private val _state = MutableStateFlow<State?>(null)
     val state = _state.asStateFlow()
 
     fun requestState(current: File) = launch {
+        logger.debug("request: ${current.absolutePath}")
         _state.value = withContext(injection.contexts.default) {
             check(current.exists())
             check(current.isDirectory)
+            val array = current.listFiles()
+            logger.debug("children: ${array?.toList()}")
             State(
                 parent = current.parentFile,
                 current = current,
-                list = current.listFiles()?.toList().orEmpty(),
+                list = array?.toList().orEmpty(),
             )
         }
     }
