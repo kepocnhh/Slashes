@@ -27,13 +27,11 @@ internal class TreeLogics(
             check(current.isDirectory)
             val comparator = Comparator<File> { left, right ->
                 when {
-                    left.isDirectory -> {
-                        when {
-                            right.isDirectory -> left.name.compareTo(right.name)
-                            else -> 1
-                        }
+                    left.isDirectory -> when {
+                        right.isDirectory -> left.name.compareTo(right.name)
+                        else -> -1
                     }
-                    right.isDirectory -> -1
+                    right.isDirectory -> 1
                     else -> left.name.compareTo(right.name)
                 }
             }

@@ -15,10 +15,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
@@ -33,6 +37,9 @@ private fun TreeScreen(
     toParent: () -> Unit,
     toDir: (File) -> Unit,
 ) {
+    val lazyListState = remember(key1 = state) {
+        LazyListState(0, 0)
+    }
     val insets = LocalView.current.rootWindowInsets.toPaddings()
     Column(
         modifier = Modifier
@@ -73,9 +80,10 @@ private fun TreeScreen(
                 .fillMaxWidth()
                 .weight(1f),
             contentPadding = PaddingValues(bottom = insets.calculateBottomPadding()),
+            state = lazyListState,
         ) {
-            state.list.forEachIndexed { index, file ->
-                item(key = index) {
+            state.list.forEach { file ->
+                item(key = file.absolutePath) {
                     val isDirectory = file.isDirectory
                     val text = if (isDirectory) {
                         "Dir: " + file.name
