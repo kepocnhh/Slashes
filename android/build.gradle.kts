@@ -145,6 +145,6 @@ dependencies {
     implementation("com.github.kepocnhh:Logics:0.1.3-SNAPSHOT")
 //    implementation("com.github.kepocnhh:Storages:0.4.2u-SNAPSHOT")
 //    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-//    "watchImplementation"("androidx.wear.compose:compose-foundation:1.3.1")
+    "watchImplementation"("androidx.wear.compose:compose-foundation:1.3.1")
     runtimeOnly("androidx.lifecycle:lifecycle-runtime:2.8.0")
 }
