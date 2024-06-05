@@ -7,7 +7,7 @@ import org.kepocnhh.slashes.module.app.Injection
 import sp.kx.logics.Logics
 import java.io.File
 
-internal class TreeLogics(
+class TreeLogics(
     private val injection: Injection,
 ) : Logics(injection.contexts.main) {
     data class State(

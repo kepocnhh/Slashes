@@ -1,6 +1,7 @@
 repositories {
     google()
     mavenCentral()
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
 }
 
 plugins {
@@ -18,4 +19,6 @@ compose.desktop {
 dependencies {
     implementation(project(":shared"))
     implementation(compose.desktop.currentOs)
+    implementation("com.github.kepocnhh:Logics:0.1.3-SNAPSHOT") // todo common
+    runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.1") // todo common coroutines
 }
