@@ -51,7 +51,8 @@ private fun TreeScreen(
                 .fillMaxWidth()
                 .height(48.dp),
         ) {
-            val enabled = state.parent != null && state.parent.canRead()
+            val parent = state.parent
+            val enabled = parent != null && parent.canRead()
             BasicText(
                 modifier = Modifier
                     .fillMaxHeight()
